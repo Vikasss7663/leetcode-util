@@ -62,6 +62,10 @@ app.get('/send-mail', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => {
+  res.send("Ok");
+})
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
