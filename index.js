@@ -31,15 +31,12 @@ app.get('/send-mail', async (req, res) => {
     const difficulty = questionInfo.question.difficulty
     const date = questionInfo.date + " " + new Date()
     const hasOfficialSolution = questionInfo.question.hasSolution
-    console.log(hasOfficialSolution);
     let solutionContent;
     if(hasOfficialSolution) {
       const solution = await fetchOfficialSolution(slug)
       solutionContent = solution.data.question.solution.content;
       solutionContent = md.render(solutionContent);
     }
-
-    console.log(solutionContent);
 
     const emailData = {
       title: title,
@@ -55,7 +52,6 @@ app.get('/send-mail', async (req, res) => {
     const body = compiledTemplate(emailData);
 
     const response = await sendEmail(date, body);
-    console.log(response);
     res.send(response);
   } catch (error) {
     res.status(500).json({ message: 'An error occurred' });
