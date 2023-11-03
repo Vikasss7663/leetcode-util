@@ -6,10 +6,22 @@ const port = 3000; // Choose the port you want to expose the endpoint on
 const fetchLeetcodeDailyChallenge = require('./src/fetchLeetcodeDailyChallenge');
 const sendEmail = require('./src/sendEmail')
 const fetchOfficialSolution = require('./src/fetchOfficialSolution')
+const fetchStreak = require("./src/fetchStreak")
 require('./src/scheduleTask');
+const fs = require('fs');
+const handlebars = require('handlebars');
+
+// Read the email template file
+const emailTemplate = fs.readFileSync('index.html', 'utf8');
+
+// Compile the template using Handlebars
+const compiledTemplate = handlebars.compile(emailTemplate);
 
 app.get('/send-mail', async (req, res) => {
   try {
+    const streakCount = await fetchStreak()
+    const streak = streakCount.streakCount
+    const currentDayCompleted = streakCount.currentDayCompleted
     const data = await fetchLeetcodeDailyChallenge()
     const questionInfo = data.data.activeDailyCodingChallengeQuestion;
     const link = "https://leetcode.com" + questionInfo.link;
@@ -17,26 +29,30 @@ app.get('/send-mail', async (req, res) => {
     const slug = questionInfo.question.titleSlug;
     const tags = questionInfo.question.topicTags.map(it => it.name);
     const difficulty = questionInfo.question.difficulty
-    const date = questionInfo.date + new Date()
+    const date = questionInfo.date + " " + new Date()
     const hasOfficialSolution = questionInfo.question.hasSolution
     console.log(hasOfficialSolution);
     let solutionContent;
     if(hasOfficialSolution) {
       const solution = await fetchOfficialSolution(slug)
       solutionContent = solution.data.question.solution.content;
-      solutionContent = md.render(solutionContent)
+      solutionContent = md.render(solutionContent);
     }
 
     console.log(solutionContent);
-    
-    const body = `
-      <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--pkV_ojKD--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/h4ear4i3g4q7r04utgpm.png" />
-      <h1>${title}</h1>
-      <h2>${link}</h2>
-      <h3>Difficulty: ${difficulty}</h3>
-      <h3>Tags: ${tags}</h3>
-      <pre>${solutionContent}</pre>
-    `;
+
+    const emailData = {
+      title: title,
+      link: link,
+      difficulty: difficulty,
+      tags: tags,
+      solutionContent: solutionContent,
+      streak: streak,
+      currentDayCompleted: currentDayCompleted
+    };
+  
+    // Create the HTML content by rendering the template with the data
+    const body = compiledTemplate(emailData);
 
     const response = await sendEmail(date, body);
     console.log(response);

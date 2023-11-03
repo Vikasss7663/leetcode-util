@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin: 10px 0;
+    }
+
+    p {
+      color: #555;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .streak {
+      background-color: #49A54D;
+      border-radius: 10px;
+      height: 20px;
+      margin-top: 10px;
+      width: {{streak}}%;
+    }
+
+    h2, h3 {
+      color: #333;
+    }
+
+    .chip {
+      display: inline-block;
+      background-color: #3498db;
+      color: #fff;
+      border-radius: 16px;
+      font-size: 12px;
+      padding: 4px 8px;
+      margin: 4px;
+    }
+
+    pre {
+      background-color: #f5f5f5;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: monospace;
+      margin-top: 10px;
+      padding: 10px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Leetcode Daily Challenge</h1>
+    <div class="streak" style="width: {{streak}}%;"></div>
+    <p>Streak: {{streak}}</p>
+    <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--pkV_ojKD--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/h4ear4i3g4q7r04utgpm.png" alt="Leetcode Image" />
+    <h1>{{title}}</h1>
+    <h2>{{link}}</h2>
+    <h3>Difficulty: {{difficulty}}</h3>
+    <h3>Tags:</h3>
+    {{#tags}}
+    <span class="chip">{{this}}</span>
+    {{/tags}}
+    <pre>{{{solutionContent}}}</pre>
+  </div>
+</body>
+</html>
