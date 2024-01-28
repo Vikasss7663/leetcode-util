@@ -1,4 +1,5 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 // Define your GraphQL query
 const graphql_query = `
@@ -30,22 +31,22 @@ query questionOfToday {
 `;
 
 // Replace 'your_api_url' with the actual API URL
-const apiUrl = 'https://leetcode.com/graphql';
+const apiUrl = "https://leetcode.com/graphql";
 
 // Define request options
 const requestOptions = {
-    method: 'POST',
-    body: JSON.stringify({ query: graphql_query }),
-    headers: { 
-      'Content-Type': 'application/json'
-    },
+  method: "POST",
+  body: JSON.stringify({ query: graphql_query }),
+  headers: {
+    "Content-Type": "application/json",
+  },
 };
 
 const fetchLeetcodeDailyChallenge = async () => {
   const response = await fetch(apiUrl, requestOptions);
   if (response.status === 200) {
     const data = await response.json();
-    return data
+    return data;
   } else {
     return `Request failed with status code ${response.status}`;
   }
